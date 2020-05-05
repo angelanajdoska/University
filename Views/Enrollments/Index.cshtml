@@ -13,19 +13,19 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Course)
+                @Html.DisplayNameFor(model => model.Student)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Student)
+                @Html.DisplayNameFor(model => model.Course)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Semester)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Grade)
+                @Html.DisplayNameFor(model => model.Year)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Year)
+                @Html.DisplayNameFor(model => model.Grade)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.SeminalUrl)
@@ -54,24 +54,25 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                <a asp-controller="Courses" asp-action="Details" asp-route-id="@item.CourseID">
-                    @Html.DisplayFor(modelItem => item.Course.Title)
-                    </a>
-            </td>
-            <td>
+               <td>
                 <a asp-controller="Students" asp-action="Details" asp-route-id="@item.StudentID">
                     @Html.DisplayFor(modelItem => item.Student.FullName)
                     </a>
             </td>
             <td>
+                <a asp-controller="Courses" asp-action="Details" asp-route-id="@item.CourseID">
+                    @Html.DisplayFor(modelItem => item.Course.Title)
+                    </a>
+            </td>
+         
+            <td>
                 @Html.DisplayFor(modelItem => item.Semester)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Grade)
+                @Html.DisplayFor(modelItem => item.Year)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Year)
+                @Html.DisplayFor(modelItem => item.Grade)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.SeminalUrl)

@@ -20551,6 +20551,11 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "c:\\Users\\Angela\\Desktop\\Ангела\\трета година\\шести семестар\\Развој на серверски web апликации\\проекти\\University\\Views\\Enrollments\\StudentsbyCourse.cshtml",
+      "TargetPath": "Views\\Enrollments\\StudentsbyCourse.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "c:\\Users\\Angela\\Desktop\\Ангела\\трета година\\шести семестар\\Развој на серверски web апликации\\проекти\\University\\Views\\Teachers\\Details.cshtml",
       "TargetPath": "Views\\Teachers\\Details.cshtml",
       "FileKind": "mvc"
@@ -20558,6 +20563,11 @@
     {
       "FilePath": "c:\\Users\\Angela\\Desktop\\Ангела\\трета година\\шести семестар\\Развој на серверски web апликации\\проекти\\University\\Views\\Courses\\Details.cshtml",
       "TargetPath": "Views\\Courses\\Details.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\Angela\\Desktop\\Ангела\\трета година\\шести семестар\\Развој на серверски web апликации\\проекти\\University\\Views\\Courses\\Enroll.cshtml",
+      "TargetPath": "Views\\Courses\\Enroll.cshtml",
       "FileKind": "mvc"
     },
     {
@@ -20576,8 +20586,23 @@
       "FileKind": "mvc"
     },
     {
+      "FilePath": "c:\\Users\\Angela\\Desktop\\Ангела\\трета година\\шести семестар\\Развој на серверски web апликации\\проекти\\University\\Views\\Enrollments\\Editstudent.cshtml",
+      "TargetPath": "Views\\Enrollments\\Editstudent.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\Angela\\Desktop\\Ангела\\трета година\\шести семестар\\Развој на серверски web апликации\\проекти\\University\\Views\\Enrollments\\EditByStudent.cshtml",
+      "TargetPath": "Views\\Enrollments\\EditByStudent.cshtml",
+      "FileKind": "mvc"
+    },
+    {
       "FilePath": "c:\\Users\\Angela\\Desktop\\Ангела\\трета година\\шести семестар\\Развој на серверски web апликации\\проекти\\University\\Views\\Home\\Index.cshtml",
       "TargetPath": "Views\\Home\\Index.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\Angela\\Desktop\\Ангела\\трета година\\шести семестар\\Развој на серверски web апликации\\проекти\\University\\Views\\Students\\MyCourses.cshtml",
+      "TargetPath": "Views\\Students\\MyCourses.cshtml",
       "FileKind": "mvc"
     },
     {
@@ -20633,6 +20658,11 @@
     {
       "FilePath": "c:\\Users\\Angela\\Desktop\\Ангела\\трета година\\шести семестар\\Развој на серверски web апликации\\проекти\\University\\Views\\Students\\Details.cshtml",
       "TargetPath": "Views\\Students\\Details.cshtml",
+      "FileKind": "mvc"
+    },
+    {
+      "FilePath": "c:\\Users\\Angela\\Desktop\\Ангела\\трета година\\шести семестар\\Развој на серверски web апликации\\проекти\\University\\Views\\Teachers\\Courses.cshtml",
+      "TargetPath": "Views\\Teachers\\Courses.cshtml",
       "FileKind": "mvc"
     },
     {

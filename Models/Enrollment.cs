@@ -8,29 +8,32 @@ namespace University.Models
    
     public class Enrollment
     {
-        public int EnrollmentID { get; set; }
+        public long EnrollmentID { get; set; }
         public int CourseID { get; set; }
-        public int StudentID { get; set; }
+        public long StudentID { get; set; }
         [StringLength(10)]
         public string Semester {get; set;}
         public int Year { get; set; }
-        public int Grade { get; set; }
+        public Nullable<int> Grade { get; set; }
         [StringLength(255)]
-       
+       [Display(Name = "Seminal Url")]
         public string SeminalUrl {get; set;}
-        
+        [Display(Name = "Project Url")]
         [StringLength(255)]
         public string ProjectUrl {get; set;}
+       [Display(Name = "Exam Points")]
+        public Nullable<int> ExamPoints { get; set; }
+        [Display(Name = "Seminal Points")]
+        public Nullable<int> SeminalPoints { get; set; }
+        [Display(Name = "Project Points")]
+        
+        public Nullable<int> ProjectPoints { get; set; }
+        [Display(Name = "Additional Points")]
        
-        public int ExamPoints { get; set; }
+        public Nullable<int> AdditionalPoints { get; set; }
+        [Display(Name = "Finish Date")]
         
-        public int SeminalPoints { get; set; }
-        
-        public int ProjectPoints { get; set; }
-       
-        public int AdditionalPoints { get; set; }
-        
-        public DateTime FinishDate { get; set; }
+        public Nullable<DateTime> FinishDate { get; set; }
       
 
        [ForeignKey("CourseID")]

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "J8nPgBlQkPsSe15HzWuNmtBkslFdnmEKefWK4MrmK96OPfsngK88+y6IQbwWIZ2ZaTE50YHYpzLUMD1jZte1Nw==",
+  "dgSpecHash": "Q3FGSQsGFYZF1DnDIP711VWzr0uvOKL9wCysdHAAZGZBmKHE20dxxWyL4+oJd/uEF9C/KURsZH5JuohwLRwTcA==",
   "success": true,
-  "projectFilePath": "c:\\Users\\Angela\\Desktop\\Ангела\\трета година\\шести семестар\\Развој на серверски web апликации\\проекти\\University\\University.csproj",
+  "projectFilePath": "C:\\Users\\Angela\\Desktop\\Ангела\\трета година\\шести семестар\\Развој на серверски web апликации\\проекти\\University\\University.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Angela\\.nuget\\packages\\entityframework\\5.0.0\\entityframework.5.0.0.nupkg.sha512",
     "C:\\Users\\Angela\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.0\\microsoft.bcl.asyncinterfaces.1.1.0.nupkg.sha512",

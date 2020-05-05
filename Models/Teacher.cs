@@ -22,7 +22,7 @@ namespace University.Models
         public string LastName {get; set;}
         [StringLength(50)]
         public string Degree { get; set; }  
-        [Display(Name = "Academik Rank")]
+        [Display(Name = "Academic Rank")]
         [StringLength(25)]      
         public string AcademicRank { get; set; }
         [Display(Name = "Office Number")]
@@ -32,8 +32,9 @@ namespace University.Models
          [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Hire Date")]
-        public DateTime HireDate { get; set; }
+        public DateTime? HireDate { get; set; }
          [Display(Name = "Full Name")]
+         public string ProfilePicture { get; set; }
         public string FullName
         {
             get { return FirstName + " " + LastName; }

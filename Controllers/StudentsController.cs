@@ -9,6 +9,9 @@ using Microsoft.Extensions.Logging;
 using University.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using University.ViewModels;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 
 
@@ -17,10 +20,12 @@ namespace University.Controllers
     public class StudentsController : Controller
     {
           private readonly UniversityContext _context;
+          private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public StudentsController(UniversityContext context)
+        public StudentsController(UniversityContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
       public async Task<IActionResult> Index(string searchString)
     {
@@ -37,7 +42,7 @@ namespace University.Controllers
  
         return View(await students.AsNoTracking().ToListAsync());
     }
-    public async Task<IActionResult> Details(int? id)
+    public async Task<IActionResult> Details(Int64? id)
 {
     if (id == null)
     {
@@ -63,22 +68,50 @@ namespace University.Controllers
         }
 [HttpPost]
 [ValidateAntiForgeryToken]
-public async Task<IActionResult> Create([Bind("StudentId, FirstName, LastName, EnrollmentDate, AcquiredCredits, CurrentSemestar, EducationLevel")] Student student)
-{
-  
-        if (ModelState.IsValid)
+   public async Task<IActionResult> Create(StudentForm model)
         {
-            _context.Add(student);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (ModelState.IsValid)
+            {
+                string uniqueFileName = UploadedFile(model);
+
+                Student student = new Student
+                {
+                    StudentId = model.Index,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    EnrollmentDate = model.EnrollmentDate,
+                    AcquiredCredits = model.AcquiredCredits,
+                    CurrentSemestar = model.CurrentSemestar,
+                    ProfilePicture = uniqueFileName,
+                    EducationLevel = model.EducationLevel,
+                    Enrollments= model.Courses
+                };
+
+                _context.Add(student);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View();
         }
-    
-    
-    return View(student);
-}
-  // GET: Students/Edit/5
-        public async Task<IActionResult> Edit(long? id)
+          private string UploadedFile(StudentForm model)
         {
+            string uniqueFileName = null;
+
+            if (model.ProfilePicture != null)
+            {
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.ProfilePicture.FileName);
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.ProfilePicture.CopyTo(fileStream);
+                }
+            }
+            return uniqueFileName;
+        }
+  // GET: Students/Edit/5
+        public async Task<IActionResult> Edit(Int64? id)
+         {
             if (id == null)
             {
                 return NotFound();
@@ -89,42 +122,75 @@ public async Task<IActionResult> Create([Bind("StudentId, FirstName, LastName, E
             {
                 return NotFound();
             }
-            return View(student);
+
+            StudentForm vm = new StudentForm
+            {
+                Id = student.ID,
+                FirstName = student.FirstName,
+                LastName = student.LastName,
+                Index = student.StudentId,
+                EnrollmentDate = student.EnrollmentDate,
+                AcquiredCredits = student.AcquiredCredits,
+                CurrentSemestar = student.CurrentSemestar,
+                EducationLevel = student.EducationLevel,
+                Courses = student.Enrollments
+            };
+
+            return View(vm);
         }
 
         // POST: Students/Edit/5
     
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPost(long? id)
+        public async Task<IActionResult> Edit(int id, StudentForm vm)
         {
-            if (id == null)
+            if (id != vm.Id)
             {
                 return NotFound();
             }
-            var studentToUpdate = await _context.Students.FirstOrDefaultAsync(s => s.ID == id);
-            if (await TryUpdateModelAsync<Student>(
-                studentToUpdate,
-                "",
-                s => s.StudentId,s=> s.FirstName, s => s.LastName, s => s.EnrollmentDate, s=> s.AcquiredCredits, s=>s.CurrentSemestar, s=>s.EducationLevel))
+
+            if (ModelState.IsValid)
             {
                 try
                 {
+                    string uniqueFileName = UploadedFile(vm);
+
+                    Student student = new Student
+                    {
+                        ID = vm.Id,
+                        FirstName = vm.FirstName,
+                        LastName = vm.LastName,
+                        ProfilePicture = uniqueFileName,
+                        EnrollmentDate = vm.EnrollmentDate,
+                        CurrentSemestar = vm.CurrentSemestar,
+                        AcquiredCredits = vm.AcquiredCredits,
+                        StudentId = vm.Index,
+                        EducationLevel = vm.EducationLevel,
+                        Enrollments = vm.Courses
+                    };
+
+                    _context.Update(student);
                     await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
                 }
-                catch (DbUpdateException /* ex */)
+                catch (DbUpdateConcurrencyException)
                 {
-                    //Log the error (uncomment ex variable name and write a log.)
-                    ModelState.AddModelError("", "Unable to save changes. " +
-                        "Try again, and if the problem persists, " +
-                        "see your system administrator.");
+                    if (!StudentExists(vm.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
+                return RedirectToAction(nameof(Index));
             }
-            return View(studentToUpdate);
+            return View(vm);
         }
+
  // GET: Students/Delete/5
-        public async Task<IActionResult> Delete(int? id, bool? saveChangesError = false)
+        public async Task<IActionResult> Delete(Int64? id, bool? saveChangesError = false)
         {
             if (id == null)
             {
@@ -151,30 +217,43 @@ public async Task<IActionResult> Create([Bind("StudentId, FirstName, LastName, E
         // POST: Students/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(long id)
+         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var student = await _context.Students.FindAsync(id);
-            if (student == null)
+           
+            //delete image file from the folder
+            string path = Path.Combine(_webHostEnvironment.WebRootPath, "images", student.ProfilePicture);
+            FileInfo file = new FileInfo(path);
+            if (file.Exists)//check file exsit or not
             {
-                return RedirectToAction(nameof(Index));
+                file.Delete();
             }
 
-            try
-            {
-                _context.Students.Remove(student);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            catch (DbUpdateException /* ex */)
-            {
-                //Log the error (uncomment ex variable name and write a log.)
-                return RedirectToAction(nameof(Delete), new { id = id, saveChangesError = true });
-            }
+            _context.Students.Remove(student);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         private bool StudentExists(long id)
         {
             return _context.Students.Any(e => e.ID == id);
+        }
+
+       public async Task<IActionResult> MyCourses(long? id)
+        {
+            IQueryable<Course> courses = _context.Courses.Include(c => c.FirstTeacher).Include(c => c.SecondTeacher).AsQueryable();
+
+            IQueryable<Enrollment> enrollments = _context.Enrollments.AsQueryable();
+            enrollments = enrollments.Where(s => s.StudentID==id); //se zemaat onie zapisi kaj koi studentId == id-to od url-to
+            IEnumerable<int> enrollmentsIDS = enrollments.Select(e => e.CourseID).Distinct(); //se zemaat distinct IDs na courses od prethodno najdenite zapisi
+
+            courses = courses.Where(s => enrollmentsIDS.Contains(s.CourseID));  //filtriranje na students spored id
+
+            courses = courses.Include(c => c.Enrollments).ThenInclude(c => c.Student);
+
+            ViewData["StudentName"] = _context.Students.Where(t => t.ID == id).Select(t => t.FullName).FirstOrDefault();
+            ViewData["studentId"] = id;
+            return View(courses);
         }
 
     }

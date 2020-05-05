@@ -141,11 +141,11 @@ namespace University.Controllers
                     _context.Update(viewModel.course);
                     await _context.SaveChangesAsync();
 
-                    IEnumerable<int> listStudents = viewModel.selectedStudents;
+                    IEnumerable<long> listStudents = viewModel.selectedStudents;
                     IQueryable<Enrollment> toBeRemoved = _context.Enrollments.Where(s => !listStudents.Contains(s.StudentID) && s.CourseID == id);
                     _context.Enrollments.RemoveRange(toBeRemoved);
-                    IEnumerable<int> existStudents = _context.Enrollments.Where(s => listStudents.Contains(s.StudentID) && s.CourseID == id).Select(s => s.StudentID);
-                    IEnumerable<int> newStudents = listStudents.Where(s => !existStudents.Contains(s));
+                    IEnumerable<long> existStudents = _context.Enrollments.Where(s => listStudents.Contains(s.StudentID) && s.CourseID == id).Select(s => s.StudentID);
+                    IEnumerable<long> newStudents = listStudents.Where(s => !existStudents.Contains(s));
                     foreach (int studentId in newStudents)
                         _context.Enrollments.Add(new Enrollment { StudentID = studentId, CourseID = id });
 
@@ -222,6 +222,63 @@ namespace University.Controllers
         {
             return _context.Courses.Any(e => e.CourseID == id);
         }
+
+           // GET: Courses/Enroll/3
+        public async Task<IActionResult> Enroll(int? id)
+        {
+            var course = _context.Courses.Where(m => m.CourseID == id).Include(m => m.Enrollments).First();
+
+            EnrollmentViewModel vm = new EnrollmentViewModel
+            {
+                StudentsList = new MultiSelectList(_context.Students.OrderBy(s => s.FirstName), "ID", "FullName"),
+                SelectedStudents = course.Enrollments.Select(sa => sa.StudentID)
+            };
+
+            ViewData["CourseName"] = _context.Courses.Where(c => c.CourseID == id).Select(c => c.Title).FirstOrDefault();
+            ViewData["chosenId"] = id;
+            return View(vm);
+        }
+
+         // POST: Courses/Enroll/3
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Enroll(int id, EnrollmentViewModel viewmodel)
+        { 
+            if (id != viewmodel.NewEnrollment.CourseID)
+            {
+                return NotFound();
+            }
+
+            //Insert (enroll students)
+            if (viewmodel.NewEnrollment.FinishDate == null)
+            {
+                IEnumerable<long> listStudents = viewmodel.SelectedStudents;
+                IEnumerable<long> existStudents = _context.Enrollments.Where(s => listStudents.Contains(s.StudentID) && s.CourseID == id).Select(s => s.StudentID);
+                IEnumerable<long> newStudents = listStudents.Where(s => !existStudents.Contains(s));
+
+                foreach (int studentId in newStudents)
+                    _context.Enrollments.Add(new Enrollment { StudentID = studentId, CourseID = id, Year = viewmodel.NewEnrollment.Year, Semester = viewmodel.NewEnrollment.Semester });
+
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                //Update enrollments (write off students) 
+                var enrollments = _context.Enrollments.Where(e => e.CourseID == id).Include(e => e.Course).Include(e => e.Student);
+
+                foreach (Enrollment e in enrollments) {
+                    e.FinishDate = viewmodel.NewEnrollment.FinishDate;
+                    _context.Enrollments.Add(e);
+                }
+
+                
+                await _context.SaveChangesAsync();
+
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
 
     }
 }

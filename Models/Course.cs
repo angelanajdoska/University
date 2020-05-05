@@ -23,8 +23,8 @@ namespace University.Models
         [Display(Name = "Ecudation Level")]
         [StringLength(25)]
         public string EducationLevel {get; set;}
-        public int FirstTeacherId {get; set;}
-        public int SecondTeacherId {get; set;}
+        public int? FirstTeacherId {get; set;}
+        public int? SecondTeacherId {get; set;}
         
         [ForeignKey("FirstTeacherId")]
         [Display(Name = "First Teacher")]

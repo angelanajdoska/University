@@ -5028,11 +5028,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\Angela\\Desktop\\Ангела\\трета година\\шести семестар\\Развој на серверски web апликации\\проекти\\University\\University.csproj",
+      "projectUniqueName": "C:\\Users\\Angela\\Desktop\\Ангела\\трета година\\шести семестар\\Развој на серверски web апликации\\проекти\\University\\University.csproj",
       "projectName": "University",
-      "projectPath": "c:\\Users\\Angela\\Desktop\\Ангела\\трета година\\шести семестар\\Развој на серверски web апликации\\проекти\\University\\University.csproj",
+      "projectPath": "C:\\Users\\Angela\\Desktop\\Ангела\\трета година\\шести семестар\\Развој на серверски web апликации\\проекти\\University\\University.csproj",
       "packagesPath": "C:\\Users\\Angela\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\Angela\\Desktop\\Ангела\\трета година\\шести семестар\\Развој на серверски web апликации\\проекти\\University\\obj\\",
+      "outputPath": "C:\\Users\\Angela\\Desktop\\Ангела\\трета година\\шести семестар\\Развој на серверски web апликации\\проекти\\University\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Angela\\AppData\\Roaming\\NuGet\\NuGet.Config"

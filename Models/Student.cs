@@ -7,7 +7,7 @@ namespace University.Models
     public class Student
     {
         [Required]
-        public int ID { get; set; }
+        public long ID { get; set; }
         [Required]
         [StringLength(10)]
         public string StudentId {get; set;}
@@ -22,15 +22,17 @@ namespace University.Models
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Enrollment Date")]
-        public DateTime EnrollmentDate { get; set; }
+        public Nullable<DateTime> EnrollmentDate { get; set; }
         [Display(Name = "Acquired Credits")]
-        public int AcquiredCredits { get; set; }
+        public Nullable<int> AcquiredCredits { get; set; }
         [Display(Name = "Current Semestar")]
-        public int CurrentSemestar { get; set; }
+        public Nullable<int> CurrentSemestar { get; set; }
         [Display(Name = "Education Level")]
         [StringLength(25)]
         public string EducationLevel { get; set; }
          [Display(Name = "Full Name")]
+
+         public string ProfilePicture { get; set; }
         public string FullName
         {
             get { return FirstName + " " + LastName; }

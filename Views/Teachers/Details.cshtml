@@ -63,7 +63,9 @@
                             @Html.DisplayFor(modelItem => item.CourseID)
                         </td>
                         <td>
+                            <a asp-controller="Courses" asp-action="Details" asp-route-id="@item.CourseID">
                             @Html.DisplayFor(modelItem => item.Title)
+                            </a>
                         </td>
                     </tr>
                 }
@@ -77,7 +79,9 @@
                             @Html.DisplayFor(modelItem => item.CourseID)
                         </td>
                         <td>
+                              <a asp-controller="Courses" asp-action="Details" asp-route-id="@item.CourseID">
                             @Html.DisplayFor(modelItem => item.Title)
+                            </a>
                         </td>
                     </tr>
                 }

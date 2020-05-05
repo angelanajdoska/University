@@ -51,7 +51,15 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            
+             <td>
+                @{ if (item.ProfilePicture != null){
+                <img src="~/images/@item.ProfilePicture"
+                 class="rounded-circle"
+                     height="40" width="40"
+                     asp-append-version="true"/>}
+                }
+            </td>
+
              <td>
                 @Html.DisplayFor(modelItem => item.StudentId)
             </td>
@@ -76,7 +84,8 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a> |
+                <a asp-action="MyCourses" asp-route-id="@item.ID">Courses</a>
             </td>
         </tr>
 }
