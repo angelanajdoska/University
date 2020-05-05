@@ -30,9 +30,10 @@ namespace University.Models
         [Display(Name = "Education Level")]
         [StringLength(25)]
         public string EducationLevel { get; set; }
-         [Display(Name = "Full Name")]
+       
 
          public string ProfilePicture { get; set; }
+           [Display(Name = "Full Name")]
         public string FullName
         {
             get { return FirstName + " " + LastName; }

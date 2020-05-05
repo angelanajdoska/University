@@ -198,7 +198,7 @@ namespace University.Controllers
             return View(vm);
         }
          // GET: Enrollments/Editstudent/5
-        public async Task<IActionResult> Editstudent(int? id)
+        public async Task<IActionResult> Editstudent(long? id)
         {
             if (id == null)
             {
@@ -254,7 +254,7 @@ namespace University.Controllers
         }
 
      // GET: Enrollments/EditByStudent/5
-        public async Task<IActionResult> EditByStudent(int? id)
+        public async Task<IActionResult> EditByStudent(long? id)
         {
             if (id == null)
             {
@@ -294,7 +294,7 @@ namespace University.Controllers
         // POST: Enrollments/EditByStudent/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditByStudent(int id, EnrollmentView vm)
+        public async Task<IActionResult> EditByStudent(long id, EnrollmentView vm)
         { 
             if (id != vm.Id) 
             {

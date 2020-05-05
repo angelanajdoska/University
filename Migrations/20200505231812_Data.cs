@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace University.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Data : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,13 +13,14 @@ namespace University.Migrations
                 {
                     ID = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StudentId = table.Column<string>(nullable: true),
-                    FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true),
-                    EnrollmentDate = table.Column<DateTime>(nullable: false),
-                    AcquiredCredits = table.Column<int>(nullable: false),
-                    CurrentSemestar = table.Column<int>(nullable: false),
-                    EducationLevel = table.Column<string>(nullable: true)
+                    StudentId = table.Column<string>(maxLength: 10, nullable: false),
+                    FirstName = table.Column<string>(maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(maxLength: 50, nullable: false),
+                    EnrollmentDate = table.Column<DateTime>(nullable: true),
+                    AcquiredCredits = table.Column<int>(nullable: true),
+                    CurrentSemestar = table.Column<int>(nullable: true),
+                    EducationLevel = table.Column<string>(maxLength: 25, nullable: true),
+                    ProfilePicture = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -32,12 +33,13 @@ namespace University.Migrations
                 {
                     TeacherId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true),
-                    Degree = table.Column<string>(nullable: true),
-                    AcademicRank = table.Column<string>(nullable: true),
-                    OfficeNumber = table.Column<string>(nullable: true),
-                    HireDate = table.Column<DateTime>(nullable: false)
+                    FirstName = table.Column<string>(maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(maxLength: 50, nullable: false),
+                    Degree = table.Column<string>(maxLength: 50, nullable: true),
+                    AcademicRank = table.Column<string>(maxLength: 25, nullable: true),
+                    OfficeNumber = table.Column<string>(maxLength: 10, nullable: true),
+                    HireDate = table.Column<DateTime>(nullable: true),
+                    ProfilePicture = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -49,24 +51,27 @@ namespace University.Migrations
                 columns: table => new
                 {
                     CourseID = table.Column<int>(nullable: false),
-                    Title = table.Column<string>(nullable: true),
+                    Title = table.Column<string>(maxLength: 100, nullable: false),
                     Credits = table.Column<int>(nullable: false),
                     Semester = table.Column<int>(nullable: false),
-                    Programme = table.Column<string>(nullable: true),
-                    EducationLevel = table.Column<string>(nullable: true),
-                    FirstTeacherId = table.Column<int>(nullable: false),
-                    SecondTeacherId = table.Column<int>(nullable: false),
-                    TeacherId = table.Column<int>(nullable: true)
+                    Programme = table.Column<string>(maxLength: 100, nullable: true),
+                    EducationLevel = table.Column<string>(maxLength: 25, nullable: true),
+                    FirstTeacherId = table.Column<int>(nullable: true),
+                    SecondTeacherId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Course", x => x.CourseID);
                     table.ForeignKey(
-                        name: "FK_Course_Teacher_TeacherId",
-                        column: x => x.TeacherId,
+                        name: "FK_Course_Teacher_FirstTeacherId",
+                        column: x => x.FirstTeacherId,
                         principalTable: "Teacher",
-                        principalColumn: "TeacherId",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "TeacherId");
+                    table.ForeignKey(
+                        name: "FK_Course_Teacher_SecondTeacherId",
+                        column: x => x.SecondTeacherId,
+                        principalTable: "Teacher",
+                        principalColumn: "TeacherId");
                 });
 
             migrationBuilder.CreateTable(
@@ -77,16 +82,16 @@ namespace University.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CourseID = table.Column<int>(nullable: false),
                     StudentID = table.Column<long>(nullable: false),
-                    Semester = table.Column<string>(nullable: true),
+                    Semester = table.Column<string>(maxLength: 10, nullable: true),
                     Year = table.Column<int>(nullable: false),
-                    Grade = table.Column<int>(nullable: false),
-                    SeminalUrl = table.Column<string>(nullable: true),
-                    ProjectUrl = table.Column<string>(nullable: true),
-                    ExamPoints = table.Column<int>(nullable: false),
-                    SeminalPoints = table.Column<int>(nullable: false),
-                    ProjectPoints = table.Column<int>(nullable: false),
-                    AdditionalPoints = table.Column<int>(nullable: false),
-                    FinishDate = table.Column<DateTime>(nullable: false)
+                    Grade = table.Column<int>(nullable: true),
+                    SeminalUrl = table.Column<string>(maxLength: 255, nullable: true),
+                    ProjectUrl = table.Column<string>(maxLength: 255, nullable: true),
+                    ExamPoints = table.Column<int>(nullable: true),
+                    SeminalPoints = table.Column<int>(nullable: true),
+                    ProjectPoints = table.Column<int>(nullable: true),
+                    AdditionalPoints = table.Column<int>(nullable: true),
+                    FinishDate = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -95,20 +100,23 @@ namespace University.Migrations
                         name: "FK_Enrollment_Course_CourseID",
                         column: x => x.CourseID,
                         principalTable: "Course",
-                        principalColumn: "CourseID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "CourseID");
                     table.ForeignKey(
                         name: "FK_Enrollment_Student_StudentID",
                         column: x => x.StudentID,
                         principalTable: "Student",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Course_TeacherId",
+                name: "IX_Course_FirstTeacherId",
                 table: "Course",
-                column: "TeacherId");
+                column: "FirstTeacherId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Course_SecondTeacherId",
+                table: "Course",
+                column: "SecondTeacherId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Enrollment_CourseID",
