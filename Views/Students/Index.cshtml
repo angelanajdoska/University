@@ -54,12 +54,12 @@
 @foreach (var item in Model) {
         <tr>
              <td>
-                @{ if (item.ProfilePicture != null){
+                
                 <img src="~/images/@item.ProfilePicture"
                  class="rounded-circle"
                      height="40" width="40"
-                     asp-append-version="true"/>}
-                }
+                     asp-append-version="true"/>
+                
             </td>
 
              <td>

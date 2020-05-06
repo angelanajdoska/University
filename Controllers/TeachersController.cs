@@ -192,6 +192,7 @@ namespace University.Controllers
                 HireDate = teacher.HireDate,
                 Courses_first = teacher.Course1,
                 Courses_second = teacher.Course2
+
             };
 
             return View(vm);

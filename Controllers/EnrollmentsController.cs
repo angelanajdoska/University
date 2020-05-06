@@ -188,13 +188,14 @@ namespace University.Controllers
                 //se prikazuvat studentite zapisani vo poslednata godina
                 enrollments = enrollments.Where(x => x.Year == DateTime.Now.Year);
             }
+           
 
             EnrollmentFilter vm = new EnrollmentFilter
             {
                 Enrollments = await enrollments.ToListAsync()
             };
 
-            ViewData["CourseName"] = _context.Courses.Where(c => c.CourseID == id).Select(c => c.Title).FirstOrDefault();
+            ViewData["currentYear"] = _context.Courses.Where(c => c.CourseID == id).Select(c => c.Title).FirstOrDefault();
             return View(vm);
         }
          // GET: Enrollments/Editstudent/5
