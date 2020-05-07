@@ -352,7 +352,7 @@ namespace University.Controllers
 
             if (model.SeminalUrl != null)
             {
-                string uploadsFolder = Path.Combine( _webHostEnvironment.WebRootPath  , "seminalFiles");
+                string uploadsFolder = Path.Combine( _webHostEnvironment.WebRootPath  , "projects");
                 uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.SeminalUrl.FileName);
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
                 using (var fileStream = new FileStream(filePath, FileMode.Create))

@@ -155,7 +155,7 @@ namespace University.Controllers
 
             if (model.ProfilePicture != null)
             {
-                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "teacherimages");
                 uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.ProfilePicture.FileName);
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
                 using (var fileStream = new FileStream(filePath, FileMode.Create))

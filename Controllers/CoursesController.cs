@@ -112,15 +112,9 @@ namespace University.Controllers
                 return NotFound();
             }
 
-          ViewModel viewmodel=new ViewModel
-            {
-                course = course,
-                selectedStudents = course.Enrollments.Select(m => m.StudentID),
-                studentList = new MultiSelectList(_context.Enrollments, "ID", "FullName")
-            };
-             PopulateTeachersDropDownList1(course.FirstTeacherId);
-           PopulateTeachersDropDownList2(course.SecondTeacherId);
-            return View(viewmodel);
+            ViewData["FirstTeacherId"] = new SelectList(_context.Teachers, "TeacherId", "FullName", course.FirstTeacherId);
+            ViewData["SecondTeacherId"] = new SelectList(_context.Teachers, "TeacherId", "FullName", course.SecondTeacherId);
+            return View(course);
         }
 
         // POST: Courses/Edit/5

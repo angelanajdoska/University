@@ -66,6 +66,7 @@ namespace University.Controllers
         {
             return View();
         }
+        
 [HttpPost]
 [ValidateAntiForgeryToken]
    public async Task<IActionResult> Create(StudentForm model)
@@ -99,7 +100,7 @@ namespace University.Controllers
 
             if (model.ProfilePicture != null)
             {
-                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "studentimages");
                 uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.ProfilePicture.FileName);
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
