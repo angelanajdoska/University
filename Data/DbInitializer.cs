@@ -137,6 +137,22 @@ namespace University.Data
             }
             context.SaveChanges();
 
+
+if(context.AppUser.Any())
+{
+    return;
+}
+
+             context.AppUser.AddRange(
+        new AppUser
+        {
+            Name = "Admin",
+            Email="admin@hogwarts.com",
+            Password="Admin_123"
+            
+        }
+             );
+              context.SaveChanges();
             
         }
     }

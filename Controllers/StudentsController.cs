@@ -12,7 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using University.ViewModels;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
-
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 
 namespace University.Controllers
@@ -21,12 +22,16 @@ namespace University.Controllers
     {
           private readonly UniversityContext _context;
           private readonly IWebHostEnvironment _webHostEnvironment;
+          private UserManager<AppUser> userManager;
 
-        public StudentsController(UniversityContext context, IWebHostEnvironment webHostEnvironment)
+        public StudentsController(UniversityContext context, IWebHostEnvironment webHostEnvironment, UserManager<AppUser> usrMgr)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
+            userManager = usrMgr;
         }
+
+         [Authorize(Roles = "Admin")]
       public async Task<IActionResult> Index(string searchString)
     {
          ViewData["CurrentFilter"] = searchString;
@@ -42,6 +47,8 @@ namespace University.Controllers
  
         return View(await students.AsNoTracking().ToListAsync());
     }
+
+     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Details(Int64? id)
 {
     if (id == null)
@@ -62,6 +69,7 @@ namespace University.Controllers
 
     return View(student);
 }
+ [Authorize(Roles = "Admin")]
   public IActionResult Create()
         {
             return View();
@@ -69,6 +77,7 @@ namespace University.Controllers
         
 [HttpPost]
 [ValidateAntiForgeryToken]
+ [Authorize(Roles = "Admin")]
    public async Task<IActionResult> Create(StudentForm model)
         {
             if (ModelState.IsValid)
@@ -111,6 +120,7 @@ namespace University.Controllers
             return uniqueFileName;
         }
   // GET: Students/Edit/5
+   [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(Int64? id)
          {
             if (id == null)
@@ -144,6 +154,7 @@ namespace University.Controllers
     
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
+         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, StudentForm vm)
         {
             if (id != vm.Id)
@@ -191,6 +202,7 @@ namespace University.Controllers
         }
 
  // GET: Students/Delete/5
+  [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Int64? id, bool? saveChangesError = false)
         {
             if (id == null)
@@ -218,6 +230,7 @@ namespace University.Controllers
         // POST: Students/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+         [Authorize(Roles = "Admin")]
          public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var student = await _context.Students.FindAsync(id);
@@ -240,6 +253,7 @@ namespace University.Controllers
             return _context.Students.Any(e => e.ID == id);
         }
 
+        [Authorize(Roles = "Student")]
        public async Task<IActionResult> MyCourses(long? id)
         {
             IQueryable<Course> courses = _context.Courses.Include(c => c.FirstTeacher).Include(c => c.SecondTeacher).AsQueryable();

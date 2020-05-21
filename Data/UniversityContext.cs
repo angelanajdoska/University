@@ -1,11 +1,16 @@
 using University.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.SqlServer;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 
 namespace University.Data
 {
-    public class UniversityContext : DbContext
+    public class UniversityContext : IdentityDbContext<AppUser>
     {
         public UniversityContext(DbContextOptions<UniversityContext> options) : base(options)
         {
@@ -15,8 +20,10 @@ namespace University.Data
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
+         public DbSet<AppUser> AppUser { get; set; }
          protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);                            
           
             modelBuilder.Entity<Course>().ToTable("Course");
             modelBuilder.Entity<Enrollment>().ToTable("Enrollment");

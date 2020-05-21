@@ -10,6 +10,8 @@ using University.Models;
 using University.ViewModels;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 
 namespace University.Controllers
@@ -18,14 +20,17 @@ namespace University.Controllers
     {
          private readonly UniversityContext _context;
          private readonly IWebHostEnvironment _webHostEnvironment;
+         private UserManager<AppUser> userManager;
 
-        public TeachersController(UniversityContext context, IWebHostEnvironment webHostEnvironment)
+        public TeachersController(UniversityContext context, IWebHostEnvironment webHostEnvironment, UserManager<AppUser> usrMgr)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
+             userManager = usrMgr;
         }
 
         // GET: teachers
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index(int? id, int? courseID, string search)
         {
             var viewModel = new pom();
@@ -76,6 +81,7 @@ namespace University.Controllers
 
         }
          // GET: Teachers/Details/5
+         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(int? id)
         {
            
@@ -98,6 +104,7 @@ namespace University.Controllers
             return View(teacher);
         }
           // GET: Teachers/Create
+          [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
            
@@ -107,6 +114,7 @@ namespace University.Controllers
         // POST: Teachers/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(TeacherForm model, string[] selectedCourses, Teacher teacher)
         {
             if (selectedCourses != null)
@@ -167,6 +175,7 @@ namespace University.Controllers
         }
 
         // GET: Teachers/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -199,6 +208,7 @@ namespace University.Controllers
         }
        [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
        public async Task<IActionResult> Edit(int id, TeacherForm vm)
         {
             if (id != vm.Id)
@@ -246,6 +256,7 @@ namespace University.Controllers
         }
      
           // GET: Teachers/Delete/5
+          [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -266,6 +277,7 @@ namespace University.Controllers
         // POST: Teachers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
                 var teacher = await _context.Teachers.FindAsync(id);
@@ -290,6 +302,7 @@ namespace University.Controllers
 
         
     // GET: Teachers/Courses/2
+    [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> Courses(int id)
         {
             var courses = _context.Courses.Where(c=>c.FirstTeacherId == id || c.SecondTeacherId == id);

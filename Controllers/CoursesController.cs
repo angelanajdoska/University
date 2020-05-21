@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using University.Data;
 using University.Models;
 using University.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace University.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CoursesController : Controller
     {
         private readonly UniversityContext _context;
@@ -22,8 +24,9 @@ namespace University.Controllers
 
   
 
-
+       
         // GET: Courses
+        
         public async Task<IActionResult> Index(string stringsearch, int? intsearch)
         {            
                 var courses =  _context.Courses                       

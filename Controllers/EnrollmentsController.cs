@@ -10,6 +10,8 @@ using University.Models;
 using University.ViewModels;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace University.Controllers
 {
@@ -17,14 +19,17 @@ namespace University.Controllers
     {
         private readonly UniversityContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private UserManager<AppUser> userManager;
 
-        public EnrollmentsController(UniversityContext context, IWebHostEnvironment webHostEnvironment)
+        public EnrollmentsController(UniversityContext context, IWebHostEnvironment webHostEnvironment,  UserManager<AppUser> userMan)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
+            userManager = userMan;
         }
 
         // GET: Enrollments
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             var UniversityContext = _context.Enrollments.Include(e => e.Course).Include(e => e.Student);
@@ -32,6 +37,7 @@ namespace University.Controllers
         }
 
         // GET: Enrollments/Details/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
@@ -52,6 +58,7 @@ namespace University.Controllers
         }
 
         // GET: Enrollments/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             ViewData["CourseID"] = new SelectList(_context.Courses, "CourseID", "Title");
@@ -64,6 +71,7 @@ namespace University.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("EnrollmentID,CourseID,StudentID,Semester,Grade,Year,SeminalUrl,ProjectUrl,ExamPoints,SeminalPoints,ProjectPoints,AdditionalPoints,FinishDate")] Enrollment enrollment)
         {
             if (ModelState.IsValid)
@@ -78,6 +86,7 @@ namespace University.Controllers
         }
 
         // GET: Enrollments/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -100,6 +109,7 @@ namespace University.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(long id, [Bind("EnrollmentID,CourseID,StudentID,Semester,Grade,Year,SeminalUrl,ProjectUrl,ExamPoints,SeminalPoints,ProjectPoints,AdditionalPoints,FinishDate")] Enrollment enrollment)
         {
             if (id != enrollment.EnrollmentID)
@@ -133,6 +143,7 @@ namespace University.Controllers
         }
 
         // GET: Enrollments/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null)
@@ -155,6 +166,7 @@ namespace University.Controllers
         // POST: Enrollments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
             var enrollment = await _context.Enrollments.FindAsync(id);
@@ -169,6 +181,7 @@ namespace University.Controllers
         }
         
          // GET: Enrollments/StudentsbyCourse/5
+         [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> StudentsbyCourse(int? id, int enrollmentYear)
         { 
             if (id == null)
@@ -199,6 +212,7 @@ namespace University.Controllers
             return View(vm);
         }
          // GET: Enrollments/Editstudent/5
+         [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> Editstudent(long? id)
         {
             if (id == null)
@@ -206,7 +220,7 @@ namespace University.Controllers
                 return NotFound();
             }
 
-            var enrollment = await _context.Enrollments.FindAsync(id);
+            var enrollment = await _context.Enrollments.Include(e => e.Course).Where(e => e.CourseID == id).FirstOrDefaultAsync();;
             if (enrollment == null)
             {
                 return NotFound();
@@ -222,6 +236,7 @@ namespace University.Controllers
         // POST: Enrollments/Editstudent/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Teacher")]
         public async Task<IActionResult> Editstudent(int id, [Bind("EnrollmentID,CourseID, StudentID, Semester,Year,Grade,SeminalUrl,ProjectUrl,ExamPoints,SeminalPoints,ProjectPoints,AdditionalPoints,FinishDate")] Enrollment enrollment)
         {
             if (id != enrollment.EnrollmentID)
@@ -255,6 +270,7 @@ namespace University.Controllers
         }
 
      // GET: Enrollments/EditByStudent/5
+     [Authorize(Roles = "Student")]
         public async Task<IActionResult> EditByStudent(long? id)
         {
             if (id == null)
@@ -295,6 +311,7 @@ namespace University.Controllers
         // POST: Enrollments/EditByStudent/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Student")]
         public async Task<IActionResult> EditByStudent(long id, EnrollmentView vm)
         { 
             if (id != vm.Id) 
